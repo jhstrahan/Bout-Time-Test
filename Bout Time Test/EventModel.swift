@@ -59,6 +59,15 @@ enum Era {
             return EventSet().exodusEvents.sorted(by: <)
         }
     }
+    
+    static func randomEra() -> Era {
+        let eras = [Era.creation, Era.exodus]
+        let index = GKRandomDistribution(lowestValue: 0, highestValue: 1)
+        let chosenEra = eras[index.nextInt()]
+        
+        return chosenEra
+    }
+    
 }
 
 struct EventSet {
@@ -78,6 +87,8 @@ struct EventSet {
                                  Event.init(era: .exodus, event: "Commandment", year: 06),
                                  Event.init(era: .exodus, event: "Judgement", year: 07)]
     
+    
+    
     func masterQuiz(for era: Era) -> (master: [String], quiz: [String]) {
         var quizEvents = era.quiz
         var masterEvents = [Event]()
@@ -92,7 +103,7 @@ struct EventSet {
         }
         var answerArray = masterEvents.sorted(by: <)
         for _ in 1...4 {
-            masterArray.append(answerArray[0].description)
+            masterArray.append(answerArray[0].quizLabel)
             answerArray.remove(at: 0)
         }
         return (masterArray, quizArray)

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import GameKit
 
 class ViewController: UIViewController {
 
@@ -35,8 +36,9 @@ class ViewController: UIViewController {
     @IBOutlet weak var UpA4: UIButton!
     
     // Creat New Quiz
-    var roundOne = EventSet().masterQuiz(for: .creation)
+    var roundOne = EventSet().masterQuiz(for: Era.randomEra())
     var roundOneAnswers = [String]()
+    var roundOneMaster = [String]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,7 +54,8 @@ class ViewController: UIViewController {
         
         // Assign quiz to labels
         let testQuiz = roundOne
-        roundOneAnswers = testQuiz.1
+        roundOneAnswers = testQuiz.quiz
+        roundOneMaster = testQuiz.master
         LabelA1.text = roundOneAnswers[0]
         LabelA2.text = roundOneAnswers[1]
         LabelA3.text = roundOneAnswers[2]
@@ -147,6 +150,9 @@ class ViewController: UIViewController {
     @IBAction func buttonSwitch(_ sender: Any) {
         Button.setImage(#imageLiteral(resourceName: "play_again"), for: .normal)
         
+        
+ 
+        
     }
     
     override func becomeFirstResponder() -> Bool {
@@ -154,7 +160,11 @@ class ViewController: UIViewController {
     }
     override func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
         if motion == .motionShake {
-            shakeLabel.text = "Shaken, not stirred"
+            if roundOneAnswers == roundOneMaster {
+                shakeLabel.text = "Great Job"
+            } else {
+                shakeLabel.text = "Keep Trying"
+            }
         }
     }
     
@@ -178,6 +188,9 @@ class ViewController: UIViewController {
         
         return array
     }
+    
+    
+    
 
 
 }
