@@ -17,10 +17,22 @@ class ViewController: UIViewController {
     @IBOutlet weak var AnswerThreeView: UIView!
     @IBOutlet weak var AnswerFourView: UIView!
     
+    @IBOutlet weak var LabelA1: UILabel!
+    @IBOutlet weak var LabelA2: UILabel!
+    @IBOutlet weak var LabelA3: UILabel!
+    @IBOutlet weak var LabelA4: UILabel!
+    
+    
     @IBOutlet weak var Button: UIButton!
     @IBOutlet weak var shakeLabel: UILabel!
     
+    
+    @IBOutlet weak var DownA1: UIButton!
     @IBOutlet weak var UpA2: UIButton!
+    @IBOutlet weak var DownA2: UIButton!
+    @IBOutlet weak var UpA3: UIButton!
+    @IBOutlet weak var DownA3: UIButton!
+    @IBOutlet weak var UpA4: UIButton!
     
     
     
@@ -43,9 +55,30 @@ class ViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    
+    @IBAction func DownOne(_ sender: Any) {
+    }
+    
+    
     @IBAction func UpTwo(_ sender: Any) {
         UpA2.setImage(#imageLiteral(resourceName: "up_half_selected"), for: .highlighted)
     }
+    
+    @IBAction func DownTwo(_ sender: Any) {
+    }
+    
+    @IBAction func UpThree(_ sender: Any) {
+    }
+    
+    @IBAction func DownThree(_ sender: Any) {
+    }
+    
+    @IBAction func UpFour(_ sender: Any) {
+    }
+    
+    
+    
     @IBAction func buttonSwitch(_ sender: Any) {
         Button.setImage(#imageLiteral(resourceName: "play_again"), for: .normal)
         
