@@ -34,7 +34,9 @@ class ViewController: UIViewController {
     @IBOutlet weak var DownA3: UIButton!
     @IBOutlet weak var UpA4: UIButton!
     
-    
+    // Creat New Quiz
+    var roundOne = EventSet().masterQuiz(for: .creation)
+    var roundOneAnswers = [String]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,9 +50,25 @@ class ViewController: UIViewController {
         Button.setImage(#imageLiteral(resourceName: "next_round_success"), for: .normal)
         UpA2.setImage(#imageLiteral(resourceName: "up_half"), for: .normal)
         
+        // Assign quiz to labels
+        let testQuiz = roundOne
+        roundOneAnswers = testQuiz.1
+        LabelA1.text = roundOneAnswers[0]
+        LabelA2.text = roundOneAnswers[1]
+        LabelA3.text = roundOneAnswers[2]
+        LabelA4.text = roundOneAnswers[3]
         
     }
-
+    /*
+    override func viewDidAppear(_ animated: Bool) {
+        let testQuiz = roundOne
+        roundOneAnswers = testQuiz.1
+        LabelA1.text = roundOneAnswers[0]
+        LabelA2.text = roundOneAnswers[1]
+        LabelA3.text = roundOneAnswers[2]
+        LabelA4.text = roundOneAnswers[3]
+    }
+*/
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -58,23 +76,70 @@ class ViewController: UIViewController {
     
     
     @IBAction func DownOne(_ sender: Any) {
+        DownA1.setImage(#imageLiteral(resourceName: "down_full_selected"), for: .highlighted)
+        var new = rearrange(eventItem: roundOneAnswers, eventPosition: 0, toPosition: 1)
+        roundOneAnswers = new
+        LabelA1.text = new[0]
+        LabelA2.text = new[1]
+        LabelA3.text = new[2]
+        LabelA4.text = new[3]
+        self.view.reloadInputViews()
     }
     
     
     @IBAction func UpTwo(_ sender: Any) {
         UpA2.setImage(#imageLiteral(resourceName: "up_half_selected"), for: .highlighted)
+        var new = rearrange(eventItem: roundOneAnswers, eventPosition: 1, toPosition: 0)
+        roundOneAnswers = new
+        LabelA1.text = new[0]
+        LabelA2.text = new[1]
+        LabelA3.text = new[2]
+        LabelA4.text = new[3]
+        self.view.reloadInputViews()
     }
     
     @IBAction func DownTwo(_ sender: Any) {
+        DownA2.setImage(#imageLiteral(resourceName: "down_half_selected"), for: .highlighted)
+        var new = rearrange(eventItem: roundOneAnswers, eventPosition: 1, toPosition: 2)
+        roundOneAnswers = new
+        LabelA1.text = new[0]
+        LabelA2.text = new[1]
+        LabelA3.text = new[2]
+        LabelA4.text = new[3]
+        self.view.reloadInputViews()
     }
     
     @IBAction func UpThree(_ sender: Any) {
+        UpA3.setImage(#imageLiteral(resourceName: "up_half_selected"), for: .highlighted)
+        var new = rearrange(eventItem: roundOneAnswers, eventPosition: 2, toPosition: 1)
+        roundOneAnswers = new
+        LabelA1.text = new[0]
+        LabelA2.text = new[1]
+        LabelA3.text = new[2]
+        LabelA4.text = new[3]
+        self.view.reloadInputViews()
     }
     
     @IBAction func DownThree(_ sender: Any) {
+        DownA3.setImage(#imageLiteral(resourceName: "down_half_selected"), for: .highlighted)
+        var new = rearrange(eventItem: roundOneAnswers, eventPosition: 2, toPosition: 3)
+        roundOneAnswers = new
+        LabelA1.text = new[0]
+        LabelA2.text = new[1]
+        LabelA3.text = new[2]
+        LabelA4.text = new[3]
+        self.view.reloadInputViews()
     }
     
     @IBAction func UpFour(_ sender: Any) {
+        UpA4.setImage(#imageLiteral(resourceName: "up_full_selected"), for: .highlighted)
+        var new = rearrange(eventItem: roundOneAnswers, eventPosition: 3, toPosition: 2)
+        roundOneAnswers = new
+        LabelA1.text = new[0]
+        LabelA2.text = new[1]
+        LabelA3.text = new[2]
+        LabelA4.text = new[3]
+        self.view.reloadInputViews()
     }
     
     
@@ -91,6 +156,27 @@ class ViewController: UIViewController {
         if motion == .motionShake {
             shakeLabel.text = "Shaken, not stirred"
         }
+    }
+    
+    // Helper Methods
+    
+        // Create New Quiz with Master, Answers
+    /*
+    func newQuiz(for events: EventSet) -> ([String], [String]) {
+        let quiz = events
+        let quizMaster = quiz.master
+        let quizAnswers = quiz.quiz
+        
+        return (quizMaster, quizAnswers)
+    }
+    */
+        // Rearange Labels
+    func rearrange(eventItem: [String], eventPosition: Int, toPosition: Int) -> [String] {
+        var array = eventItem
+        let item = array.remove(at: eventPosition)
+        array.insert(item, at: toPosition)
+        
+        return array
     }
 
 
