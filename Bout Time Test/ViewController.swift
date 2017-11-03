@@ -39,9 +39,9 @@ class ViewController: UIViewController {
     @IBOutlet weak var UpA4: UIButton!
     
     // Stored Values for Quiz
-    var roundOne = EventSet().masterQuiz(for: Era.randomEra())
-    var roundOneAnswers = [String]()
-    var roundOneMaster = [String]()
+    var round = EventSet().masterQuiz(for: Era.randomEra())
+    var roundAnswers = [String]()
+    var roundMaster = [String]()
     
     // Stored Values for Timer
     var timer = Timer()
@@ -64,13 +64,13 @@ class ViewController: UIViewController {
         UpA2.setImage(#imageLiteral(resourceName: "up_half"), for: .normal)
         
         // Assign quiz to labels
-        let testQuiz = roundOne
-        roundOneAnswers = testQuiz.quiz
-        roundOneMaster = testQuiz.master
-        LabelA1.text = roundOneAnswers[0]
-        LabelA2.text = roundOneAnswers[1]
-        LabelA3.text = roundOneAnswers[2]
-        LabelA4.text = roundOneAnswers[3]
+        let testQuiz = round
+        roundAnswers = testQuiz.quiz
+        roundMaster = testQuiz.master
+        LabelA1.text = roundAnswers[0]
+        LabelA2.text = roundAnswers[1]
+        LabelA3.text = roundAnswers[2]
+        LabelA4.text = roundAnswers[3]
         
         // Start Timer
         runTimer()
@@ -85,64 +85,78 @@ class ViewController: UIViewController {
     
     @IBAction func DownOne(_ sender: Any) {
         DownA1.setImage(#imageLiteral(resourceName: "down_full_selected"), for: .highlighted)
-        let new = rearrange(eventItem: roundOneAnswers, eventPosition: 0, toPosition: 1)
-        roundOneAnswers = new
+        let new = rearrange(eventItem: roundAnswers, eventPosition: 0, toPosition: 1)
+        roundAnswers = new
         populate(labelsWith: new)
     }
     
     
     @IBAction func UpTwo(_ sender: Any) {
         UpA2.setImage(#imageLiteral(resourceName: "up_half_selected"), for: .highlighted)
-        let new = rearrange(eventItem: roundOneAnswers, eventPosition: 1, toPosition: 0)
-        roundOneAnswers = new
+        let new = rearrange(eventItem: roundAnswers, eventPosition: 1, toPosition: 0)
+        roundAnswers = new
         populate(labelsWith: new)
     }
     
     @IBAction func DownTwo(_ sender: Any) {
         DownA2.setImage(#imageLiteral(resourceName: "down_half_selected"), for: .highlighted)
-        let new = rearrange(eventItem: roundOneAnswers, eventPosition: 1, toPosition: 2)
-        roundOneAnswers = new
+        let new = rearrange(eventItem: roundAnswers, eventPosition: 1, toPosition: 2)
+        roundAnswers = new
         populate(labelsWith: new)
     }
     
     @IBAction func UpThree(_ sender: Any) {
         UpA3.setImage(#imageLiteral(resourceName: "up_half_selected"), for: .highlighted)
-        let new = rearrange(eventItem: roundOneAnswers, eventPosition: 2, toPosition: 1)
-        roundOneAnswers = new
+        let new = rearrange(eventItem: roundAnswers, eventPosition: 2, toPosition: 1)
+        roundAnswers = new
         populate(labelsWith: new)
     }
     
     @IBAction func DownThree(_ sender: Any) {
         DownA3.setImage(#imageLiteral(resourceName: "down_half_selected"), for: .highlighted)
-        let new = rearrange(eventItem: roundOneAnswers, eventPosition: 2, toPosition: 3)
-        roundOneAnswers = new
+        let new = rearrange(eventItem: roundAnswers, eventPosition: 2, toPosition: 3)
+        roundAnswers = new
         populate(labelsWith: new)
     }
     
     @IBAction func UpFour(_ sender: Any) {
         UpA4.setImage(#imageLiteral(resourceName: "up_full_selected"), for: .highlighted)
-        let new = rearrange(eventItem: roundOneAnswers, eventPosition: 3, toPosition: 2)
-        roundOneAnswers = new
+        let new = rearrange(eventItem: roundAnswers, eventPosition: 3, toPosition: 2)
+        roundAnswers = new
         populate(labelsWith: new)
     }
     
     
     
     @IBAction func buttonSwitch(_ sender: Any) {
-        Button.setImage(#imageLiteral(resourceName: "play_again"), for: .normal)
-        
-        
- 
-        
+        if Button.currentImage == #imageLiteral(resourceName: "next_round_success") {
+        newQuiz()
+        Button.alpha = 0
+        Button.isEnabled = false
+        timerLabel.alpha = 1
+        } else if Button.currentImage == #imageLiteral(resourceName: "play_again") {
+            timeLeft = 60
+            newQuiz()
+            runTimer()
+            Button.alpha = 0
+            Button.setImage(#imageLiteral(resourceName: "next_round_success"), for: .normal)
+            Button.isEnabled = false
+            timerLabel.alpha = 1
+        }
     }
     
+    // Shake functions
     override func becomeFirstResponder() -> Bool {
         return true
     }
     override func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
         if motion == .motionShake {
-            if roundOneAnswers == roundOneMaster {
+            if roundAnswers == roundMaster {
                 shakeLabel.text = "Great Job"
+                Button.setImage(#imageLiteral(resourceName: "next_round_success"), for: .normal)
+                Button.alpha = 1
+                Button.isEnabled = true
+                timerLabel.alpha = 0
             } else {
                 shakeLabel.text = "Keep Trying"
             }
@@ -151,6 +165,17 @@ class ViewController: UIViewController {
     
     // HELPER METHODS
     
+    
+        // New Quiz
+    func newQuiz() {
+        round = EventSet().masterQuiz(for: Era.randomEra())
+        roundMaster = round.master
+        roundAnswers = round.quiz
+        LabelA1.text = roundAnswers[0]
+        LabelA2.text = roundAnswers[1]
+        LabelA3.text = roundAnswers[2]
+        LabelA4.text = roundAnswers[3]
+    }
     
         // Rearange Labels
     func rearrange(eventItem: [String], eventPosition: Int, toPosition: Int) -> [String] {
@@ -173,6 +198,7 @@ class ViewController: UIViewController {
     // Timer during quiz
     func runTimer() {
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: (#selector(ViewController.updateTimer)), userInfo: nil, repeats: true)
+        timeLeft = 60
     }
     
     // proveds string for lighteningCountdown outlet
@@ -183,10 +209,18 @@ class ViewController: UIViewController {
         
         if timeLeft >= 10 {
             timerLabel.text = "\(String(minutes)):\(String(seconds))"
-        } else if timeLeft < 10 {
+        } else if timeLeft < 10 && timeLeft > 0 {
             timerLabel.text = "\(String(minutes)):0\(String(seconds))"
+        } else if timeLeft <= 0 {
+            timer.invalidate()
+            timerLabel.alpha = 0
+            Button.setImage(#imageLiteral(resourceName: "play_again"), for: .normal)
+            Button.alpha = 1
+            Button.isEnabled = true
         }
     }
+    
+    
     /*
     func updateTimer() {
         seconds -= 1
